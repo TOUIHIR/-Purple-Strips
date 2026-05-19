@@ -1353,7 +1353,7 @@
                 </div>
             </div>
             <div class="hero-image">
-                <img class="product-image" src="pr.png" alt="Purple Instant Whitening Strips">
+                <img class="product-image" src="./pr.png" alt="Purple Instant Whitening Strips">
             </div>
         </div>
     </section>
@@ -1367,13 +1367,13 @@
             </div>
             <div class="gallery-grid">
                 <div class="gallery-card">
-                    <img src="pr.png" alt="صورة المنتج الرئيسية" loading="lazy">
+                    <img src="./pr.png" alt="صورة المنتج الرئيسية" loading="lazy">
                 </div>
                 <div class="gallery-card">
-                    <img src="pr1.png" alt="تفاصيل الشرائط" loading="lazy">
+                    <img src="./pr1.png" alt="تفاصيل الشرائط" loading="lazy">
                 </div>
                 <div class="gallery-card">
-                    <img src="pr2.png" alt="عبوة Purple Instant Whitening" loading="lazy">
+                    <img src="./pr2.png" alt="عبوة Purple Instant Whitening" loading="lazy">
                 </div>
             </div>
         </div>
@@ -1609,16 +1609,37 @@
                     <label for="address">العنوان</label>
                     <input type="text" id="address" name="address" placeholder="أدخل عنوان التسليم" required>
                 </div>
+              
                 <div class="form-group">
-                    <label for="quantity">الكمية</label>
+                    <label for="sachets">اختيار الأكياس</label>
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 15px;">
+                        <label for="sachets">عدد الأكياس</label>
+                        <span style="font-size: 0.95rem; color: var(--text-light);">سعر 3 أكياس = 45 درهم</span>
+                    </div>
+                    <input type="number" id="sachets" name="sachets" min="3" step="1" placeholder="أدخل عدد الأكياس (3 أو أكثر)" required inputmode="numeric">
+                </div>
+
+                  <div class="form-group">
+                    <label for="quantity">اختيار الصندوق</label>
                     <select id="quantity" name="quantity" required>
-                        <option value="">اختر الكمية</option>
-                        <option value="1">1 صندوق</option>
-                        <option value="2">2 صندوق</option>
-                        <option value="3">3 صناديق</option>
-                        <option value="4">4 صناديق</option>
-                        <option value="5">5 صناديق أو أكثر</option>
+                        <option value="">اختر عدد الصناديق</option>
+                        <option value="1">1 صندوق - 179 درهم</option>
+                        <option value="2">2 صندوق - 358 درهم</option>
+                        <option value="3">3 صناديق - 537 درهم</option>
+                        <option value="4">4 صناديق - 716 درهم</option>
+                        <option value="5">5 صناديق أو أكثر - 895 درهم</option>
                     </select>
+                </div>
+                <div class="form-group">
+                    <div style="background: linear-gradient(135deg, var(--primary-lighter) 0%, var(--light) 100%); padding: 15px; border-radius: 10px; border: 2px solid var(--primary-light);">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span style="font-weight: 600; color: var(--primary-dark);">السعر الكلي:</span>
+                            <span id="totalPrice" style="font-weight: 700; color: var(--primary); font-size: 1.2rem;">0 درهم</span>
+                        </div>
+                        <div id="deliveryInfo" style="font-size: 0.95rem; color: #10b981; font-weight: 600; display: none;">
+                            ✓ الشحن مجاني عند شراء 2 صناديق أو أكثر
+                        </div>
+                    </div>
                 </div>
                 <button type="submit" class="order-btn">اطلب الآن عبر واتساب</button>
             </form>
@@ -1901,10 +1922,23 @@
             const phone = document.getElementById('phone').value;
             const address = document.getElementById('address').value;
             const quantity = document.getElementById('quantity').value;
+            const sachets = document.getElementById('sachets').value;
+            const totalPrice = document.getElementById('totalPrice').textContent;
+            const deliveryInfoText = document.getElementById('deliveryInfo').style.display === 'block' ? 'الشحن مجاني' : 'الشحن غير مدرج';
 
-            const message = `السلام عليكم، أريد طلب المنتج:\n\nالاسم: ${name}\nرقم الهاتف: ${phone}\nالعنوان: ${address}\nالكمية: ${quantity} صندوق`;
+            let orderDetails = `السلام عليكم، أريد طلب المنتج:\n\nالاسم: ${name}\nرقم الهاتف: ${phone}\nالعنوان: ${address}\n`; 
 
-            openWhatsAppWithMessage(message);
+            if (quantity !== '') {
+                orderDetails += `الكمية: ${quantity} صندوق\n`;
+            }
+
+            if (sachets !== '') {
+                orderDetails += `عدد الأكياس: ${sachets} كيس\n`;
+            }
+
+            orderDetails += `السعر الكلي: ${totalPrice}\n${deliveryInfoText}`;
+
+            openWhatsAppWithMessage(orderDetails);
         }
 
         // WhatsApp functions
@@ -1952,6 +1986,80 @@
                 }
             });
         });
+
+        // Handle sachets and quantity toggle
+        const quantitySelect = document.getElementById('quantity');
+        const sachetsSelect = document.getElementById('sachets');
+
+        quantitySelect.addEventListener('change', function() {
+            if (this.value !== '') {
+                sachetsSelect.disabled = true;
+                sachetsSelect.value = '';
+                sachetsSelect.style.opacity = '0.5';
+                sachetsSelect.style.pointerEvents = 'none';
+            } else {
+                sachetsSelect.disabled = false;
+                sachetsSelect.style.opacity = '1';
+                sachetsSelect.style.pointerEvents = 'auto';
+            }
+        });
+
+        sachetsSelect.addEventListener('input', function() {
+            if (this.value !== '') {
+                quantitySelect.disabled = true;
+                quantitySelect.value = '';
+                quantitySelect.style.opacity = '0.5';
+                quantitySelect.style.pointerEvents = 'none';
+            } else {
+                quantitySelect.disabled = false;
+                quantitySelect.style.opacity = '1';
+                quantitySelect.style.pointerEvents = 'auto';
+            }
+            updatePrice();
+        });
+
+        const PRICE_PER_SACHET = 15;
+        const BOX_PRICE = 179;
+        const FREE_DELIVERY_BOXES = 2;
+
+        function getSachetPrice(count) {
+            const sachetCount = parseInt(count, 10);
+            if (isNaN(sachetCount) || sachetCount < 3) {
+                return 0;
+            }
+            return sachetCount * PRICE_PER_SACHET;
+        }
+
+        function updatePrice() {
+            const quantityValue = quantitySelect.value;
+            const sachetsValue = sachetsSelect.value;
+            const totalPriceElement = document.getElementById('totalPrice');
+            const deliveryInfo = document.getElementById('deliveryInfo');
+            const orderButton = document.querySelector('.order-btn');
+            let total = 0;
+            let freeDelivery = false;
+
+            if (quantityValue !== '') {
+                total = parseInt(quantityValue, 10) * BOX_PRICE;
+                freeDelivery = parseInt(quantityValue, 10) >= FREE_DELIVERY_BOXES;
+            } else if (sachetsValue !== '') {
+                total = getSachetPrice(sachetsValue);
+                freeDelivery = false;
+            }
+
+            if (total > 0) {
+                const formattedTotal = total.toLocaleString('fr-FR');
+                totalPriceElement.textContent = formattedTotal + ' درهم';
+                deliveryInfo.style.display = freeDelivery ? 'block' : 'none';
+                orderButton.textContent = `اطلب الآن - ${formattedTotal} درهم`;
+            } else {
+                totalPriceElement.textContent = '0 درهم';
+                deliveryInfo.style.display = 'none';
+                orderButton.textContent = 'اطلب الآن عبر واتساب';
+            }
+        }
+
+        quantitySelect.addEventListener('change', updatePrice);
     </script>
 </body>
 </html>
