@@ -68,7 +68,18 @@
             letter-spacing: -1px;
         }
 
+        .menu-toggle {
+            display: none;
+        }
+
         .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links ul {
             display: flex;
             gap: 30px;
             align-items: center;
@@ -1180,6 +1191,68 @@
 
         /* Mobile Responsive */
         @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+                background: var(--primary);
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 1.5rem;
+            }
+
+            .header-container {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                display: none;
+                flex-direction: column;
+                gap: 0;
+                width: 100%;
+                background: rgba(255, 255, 255, 0.95);
+                padding: 0;
+                border-radius: 0;
+                box-shadow: var(--shadow);
+                z-index: 50;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links ul {
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .nav-links li {
+                border-bottom: 1px solid rgba(157, 78, 221, 0.1);
+            }
+
+            .nav-links a,
+            .nav-links button {
+                padding: 15px;
+                border-radius: 0;
+                transition: background 0.3s ease;
+                display: block;
+                width: 100%;
+                text-align: right;
+            }
+
+            .nav-links a:hover {
+                background: var(--primary-light);
+                color: white;
+            }
+
             .hero {
                 min-height: auto;
                 padding: 60px 20px;
@@ -1204,14 +1277,6 @@
 
             .section-title {
                 font-size: 2rem;
-            }
-
-            .nav-links {
-                gap: 15px;
-            }
-
-            .nav-links {
-                display: none;
             }
 
             .benefits-grid,
@@ -1251,6 +1316,37 @@
 
             .counter-text {
                 font-size: 1.2rem;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .menu-toggle {
+                display: none !important;
+            }
+
+            .nav-links {
+                position: static;
+                display: flex !important;
+                flex-direction: row;
+                gap: 30px;
+                background: transparent;
+                box-shadow: none;
+                z-index: auto;
+            }
+
+            .nav-links ul {
+                flex-direction: row;
+                gap: 30px;
+            }
+
+            .nav-links li {
+                border-bottom: none;
+            }
+
+            .nav-links a,
+            .nav-links button {
+                padding: 0;
+                text-align: auto;
             }
         }
 
@@ -1329,8 +1425,9 @@
     <header>
         <div class="header-container">
             <div class="logo">✨ Purple Strips</div>
-            <nav>
-                <ul class="nav-links">
+            <button class="menu-toggle" onclick="toggleMobileMenu()">☰</button>
+            <nav class="nav-links">
+                <ul>
                     <li><a href="#benefits">المميزات</a></li>
                     <li><a href="#how">كيفية الاستعمال</a></li>
                     <li><a href="#reviews">الآراء</a></li>
@@ -1340,6 +1437,13 @@
             </nav>
         </div>
     </header>
+
+    <script>
+        function toggleMobileMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        }
+    </script>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -1363,11 +1467,11 @@
         <div class="section-container">
             <div class="gallery-intro">
                 <h2>عرض حقيقي للمنتج</h2>
-                <p>اكتشف صور العبوة الأصلية والشرائط الفعلية قبل طلبك. تصميم أنيق ومعايير جودة عالية في كل صندوق.</p>
+                <p>اابتسامة أكثر بياضاً تبدأ من علبة فاخرة تضم 14 شريطاً احترافياً لتبييض الأسنان بسرعة ولمعان مثالي ✨</p>
             </div>
             <div class="gallery-grid">
                 <div class="gallery-card">
-                    <img src="./pr.png" alt="صورة المنتج الرئيسية" loading="lazy">
+                    <img src="./pr.png" alt="صورة المنتج الرئيسية" loading="lazy">  
                 </div>
                 <div class="gallery-card">
                     <img src="./pr1.png" alt="تفاصيل الشرائط" loading="lazy">
@@ -1525,27 +1629,29 @@
 
     <!-- Reviews Section -->
     <section class="reviews" id="reviews">
-        <div class="section-container">
-            <h2 class="section-title">آراء عملائنا</h2>
-            <div class="reviews-grid">
-                <div class="review-card">
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p class="review-text">"منتج رائع جداً! لاحظت الفرق بعد الاستعمال الأول. أسناني أصبحت بيضاء وبراقة. أنصح الجميع به!"</p>
-                    <p class="reviewer-name">فاطمة محمد - الرياض</p>
-                </div>
-                <div class="review-card">
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p class="review-text">"سهل الاستخدام جداً وآمن على الأسنان. لم أشعر بأي حساسية. النتائج رائعة وفعالة جداً!"</p>
-                    <p class="reviewer-name">أحمد الحسن - جدة</p>
-                </div>
-                <div class="review-card">
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p class="review-text">"أفضل منتج جربته لتبييض الأسنان. سعر مناسب وجودة عالية. شكراً على هذا المنتج الرائع!"</p>
-                    <p class="reviewer-name">سارة علي - الدمام</p>
-                </div>
+    <div class="section-container">
+        <h2 class="section-title">آراء الزبناء ديالنا</h2>
+        <div class="reviews-grid">
+            <div class="review-card">
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p class="review-text">"بصراحة المنتج زوين بزاف! من أول استعمال بان الفرق، سناني ولاو بيض ولامعين. كنصح بيه كاملين!"</p>
+                <p class="reviewer-name">فاطمة - الدار البيضاء</p>
+            </div>
+
+            <div class="review-card">
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p class="review-text">"ساهل فالاستعمال وما حسّيت حتى بحساسية فالسنين. النتيجة عجباتني بزاف وفعلاً كيعطي البياض."</p>
+                <p class="reviewer-name">ياسين - مراكش</p>
+            </div>
+
+            <div class="review-card">
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p class="review-text">"هاد المنتج من أحسن الحوايج اللي جربت لتبييض السنان، الجودة زوينة والثمن مناسب. غادي نعاود نطلبو!"</p>
+                <p class="reviewer-name">سلمى - طنجة</p>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- FAQ Section -->
     <section class="faq" id="faq">
@@ -1675,11 +1781,17 @@
     <script>
         // Smooth scroll functions
         function scrollToOrder() {
-            document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+            const orderSection = document.querySelector('.order-section');
+            if (orderSection) {
+                orderSection.scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
-        function scrollToSection(id) {
-            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
         // Counter animation
